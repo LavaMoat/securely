@@ -32,11 +32,9 @@ You will be able to use a new exposed API called `SECURE` to do so:
 const securely = SECURE(window, config);
 ```
 
-`@window` - the realm you wish to apply securely to (if you wish to secure the realm of your current context, just pass `window`)
-
-`@config` - an object indicating the native APIs you wish to have access to
-
-`@returns` - a function that is the only key to enable access to the natives you wished to secure
+* `@window` - the realm you wish to apply securely to (if you wish to secure the realm of your current context, just pass `window`)
+* `@config` - an object indicating the native APIs you wish to have access to
+* `@returns` - a function that is the only key to enable access to the natives you wished to secure
 
 The simple ones are objects:
 
