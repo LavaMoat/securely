@@ -114,3 +114,15 @@ But if you want to call fetch and this time make sure to avoid any potential hoo
 securely(_ => fetchS('https://example.com/this_request_is_extra_sensitive'));
 ```
 
+Accessing `S` APIs is disabled outside of the `securely` callback. This is another important security mechanizm.
+Not only that we want to have access to native APIs, but we want to make sure no other js code in runtime has such access (unless we want it to have that ability, in which case we'll pass the `securely` function on to it).
+
+Native APIs can be used by attackers who managed to execute code within the app maliciously, and we just don't want anyone to have such an ability without specifically authorizing it.
+
+That is why the `S` APIs are not accessible outside of the `securely` callback:
+
+```javascript
+console.log(fetchS); // undefined
+securely(_ => console.log(fetchS)); // ƒ fetch() { [native code] }
+console.log(fetchS); // undefined
+```
