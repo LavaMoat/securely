@@ -39,6 +39,8 @@ const securely = SECURE(window, config);
 The simple ones are objects:
 
 ```javascript
+// secure the APIs you wish
+
 const securely = SECURE(window, {
     objects: {
         'document': ['createElement'],
@@ -48,6 +50,8 @@ const securely = SECURE(window, {
         
     }
 });
+
+// securely use them
 
 const myScript = securely(_ => {
   return document.createElementS('script');
