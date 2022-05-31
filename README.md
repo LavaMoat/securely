@@ -22,7 +22,12 @@ securely(_ => fetchS('https://example.com/get_all_imgs')); // avoids attacker's 
 
 ## Usage
 
-In order to use Securely you must load the Securely script and better to do so as the first javascript code to be executed within the web app.
+In order to use Securely you must load the Securely script and better to do so as the first javascript code to be executed within the web app:
+
+```html
+<script src="./securely.prod.js"></script>
+```
+
 You may let other javascript code load and execute before Securely, but that would mean that such code will be able to break Securely's behaviour and ultimately disable its effect completely.
 
 Once you loaded Securely, you have to declare what native APIs you wish to have access to.
@@ -84,5 +89,28 @@ const result = securely(_ => {
     return arr.sliceS(2);
   }
 });
+```
+
+## Securely Technically Explained (What's the `S` suffix for?)
+
+You may have noticed that in order to use your secured natives, not only that you have to do so from within the `securely` callback, but you also have to call your native API with an `S` suffix.
+
+This is because while allowing access to native APIs we wish to maintain the possibility to access the normal state of those APIs within the web app (whether if they were hooked by anyone or not).
+
+Hooking is a common practice that many third party vendors do in order to provide their services, and in many cases in order for the app to work smoothly it needs to go through such hooked APIs.
+
+So in order to not harm the web app ecosystem, we choose to not alter but to append the securely functionallity. 
+We do that by adding `S` to the end of the desired native API.
+
+So if for example you wish to call fetch normally and go through any potential hook, you do so the way you're used to:
+
+```javascript
+fetch('https://example.com/this_is_just_a_normal_request');
+```
+
+But if you want to call fetch and this time make sure to avoid any potential hooks (whether or not malicious), that's where securely comes in:
+
+```javascript
+securely(_ => fetchS('https://example.com/this_request_is_extra_sensitive'));
 ```
 
