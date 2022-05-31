@@ -36,7 +36,7 @@ const securely = SECURE(window, config);
 * `@config` - an object indicating the native APIs you wish to have access to
 * `@returns` - a function that is the only key to enable access to the natives you wished to secure
 
-The simple ones are objects:
+The simple ones are `objects`:
 
 ```javascript
 // secure the APIs you wish
@@ -61,3 +61,28 @@ securely(_ => {
   fetchS('https://example.com/sensitive_request/');
 });
 ```
+
+But if you wish to secure properties/methods of `prototypes`, you can achieve that as well:
+
+```javascript
+// secure the APIs you wish
+
+const securely = SECURE(window, {
+    objects: {
+    
+    },
+    prototypes: {
+        'Array': ['includes', 'push', 'slice'],
+    }
+});
+
+// securely use them
+
+const result = securely(_ => {
+  const arr = ['a', 'b', 'c'];
+  if (arr.includesS('b')) {
+    return arr.sliceS(2);
+  }
+});
+```
+
