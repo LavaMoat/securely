@@ -37,6 +37,16 @@ You will be able to use a new exposed API called `SECURE` to do so:
 const securely = SECURE(window, config);
 ```
 
+`SECURE` API can also be required as part of a bundle instead of a script tag:
+
+```
+yarn add @weizman/securely
+```
+
+```javascript
+const secure = require('@weizman/securely');
+```
+
 * `@window` - the realm you wish to apply securely to (if you wish to secure the realm of your current context, just pass `window`)
 * `@config` - an object indicating the native APIs you wish to have access to
 * `@returns` - a function that is the only key to enable access to the natives you wished to secure
