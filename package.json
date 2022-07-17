@@ -29,9 +29,9 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/weizman/securely/issues"
   },
-  "homepage": "https://weizman.github.io/securely-website/"
+  "homepage": "https://weizman.github.io/securely/"
 }
