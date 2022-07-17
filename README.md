@@ -109,7 +109,7 @@ This is because while allowing access to native APIs we wish to maintain the pos
 
 Hooking is a common practice that many third party vendors do in order to provide their services, and in many cases in order for the app to work smoothly it needs to go through such hooked APIs.
 
-So in order to not harm the web app ecosystem, we choose to not alter but to append the securely functionallity. 
+So in order to not harm the web app ecosystem, we choose to not alter but to append the securely functionality. 
 We do that by adding `S` to the end of the desired native API.
 
 So if for example you wish to call fetch normally and go through any potential hook, you do so the way you're used to:
@@ -136,3 +136,11 @@ console.log(fetchS); // undefined
 securely(_ => console.log(fetchS)); // ƒ fetch() { [native code] }
 console.log(fetchS); // undefined
 ```
+
+## Supporters
+
+Funded by [Consensys 💙](https://github.com/consensys)
+
+Maintained and developed by [MetaMask 🦊](https://github.com/MetaMask)
+
+Invented and developed by [Gal Weizman 👋🏻](https://weizman.github.io/)
