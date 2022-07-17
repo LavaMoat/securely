@@ -1,0 +1,82 @@
+<html>
+    <head>
+        <title> Securely 🔒 </title>
+        <script src="../securely.js"></script>
+    </head>
+    <body>
+        <h1> Securely 🔒 </h1>
+        <blockquote>
+            Securely allows you to call native APIs using their original behaviour even if they were tampered within the web app
+            <p>
+                <a href="https://github.com/weizman/securely">📖 Technical explanation</a>
+                <br>
+                <a href="https://github.com/weizman/securely">⚙️ Installation and usage</a>
+                <br>
+                <a href="https://github.com/weizman/securely">👩🏽‍💻 Source Code </a>
+            </p>
+        </blockquote>
+
+        <h1> DEMO 🧐 </h1>
+        <blockquote>
+            This website uses Securely to show an alert message
+            <br>
+            It will do so once the button is clicked (<code>⌘ + ↵</code> / <code>^ + ↵</code> will work too)
+            <br>
+            Use the textarea to run JS code before the website's alert message
+            <br>
+            Try to do anything in your power to prevent the alert message from showing
+            <br>
+            If you succeed - Congratz! You bypassed Securely (please, <a href="https://github.com/weizman/securely/issues/new?title=Securely+can+be+bypassed+with+...&body=Reproduce+by+running+<ENTER_POC_CODE_HERE>"> open an issue</a>, we'd love to improve its security)
+            <br><br>
+            <button id="bt"> Run (<code>⌘ + ↵</code> / <code>^ + ↵</code>)</button>
+        </blockquote>
+
+
+        <br><br>
+
+        <textarea id="ta" style="width: 43%; height: 30%"></textarea>
+
+        <br><br>
+
+        <blockquote>
+            Funded by <a href="https://github.com/consensys">Consensys 💙</a>
+            <br>
+            Maintained and developed by <a href="https://github.com/MetaMask">MetaMask 🦊</a>
+            <br>
+            Invented and developed by <a href="https://weizman.github.io/">Gal Weizman 👋🏻</a>
+        </blockquote>
+
+        <script>
+            function run(js) {
+                const script = document.createElement('script');
+                script.textContent = js;
+                document.head.appendChild(script);
+            }
+
+            const securely = SECURE(window, {
+                objects: {
+                    window: ['alert']
+                }
+            });
+
+            ta.value = JSON.parse(localStorage.code || '""') ||
+`
+    // attempt to disarm Securely's "alertS" native API (with no success!)
+
+    Object.defineProperty(window, 'alertS', {value: () => 'ALERT IS DISABLED!'});
+`;
+
+            bt.addEventListener('click', () => {
+                localStorage.code = JSON.stringify(ta.value);
+                run(ta.value);
+                securely(() => { alertS('Real alert is still accessible thanks to Securely - try again!'); });
+            });
+
+            window.addEventListener('keydown', (event) => {
+                if ((event.ctrlKey || event.metaKey) && event.code === 'Enter') {
+                    bt.click();
+                }
+            })
+        </script>
+    </body>
+</html>

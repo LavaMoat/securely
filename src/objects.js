@@ -5,7 +5,7 @@ module.exports = function objects(win, nativeWin, shouldAllowNativesAccess, obje
             const api = apis[i];
             let native = nativeWin[object][api];
             if (typeof native === 'function') {
-                native = native.bind(nativeWin[object]);
+                native = native.bind(win[object]);
             }
             nativeWin['Object'].defineProperty(win[object], api + 'S', {
                 configurable: false,
