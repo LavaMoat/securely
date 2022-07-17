@@ -20,6 +20,9 @@ fetch('https://example.com/get_all_imgs'); // goes through attacker's hook
 securely(_ => fetchS('https://example.com/get_all_imgs')); // avoids attacker's hook by using native fetch API
 ```
 
+* [Test](/SECURELY_WEBSITE) `Securely` for yourself with this live demo!
+* `Securely` is still experimental ⚠️ - your [help](#Contribute) is highly appreciated!
+
 ## Usage
 
 In order to use Securely you must load the Securely script and better to do so as the first javascript code to be executed within the web app:
