@@ -112,7 +112,7 @@ This is because while allowing access to native APIs we wish to maintain the pos
 
 Hooking is a common practice that many third party vendors do in order to provide their services, and in many cases in order for the app to work smoothly it needs to go through such hooked APIs.
 
-So in order to not harm the web app ecosystem, we choose to not alter but to append the securely functionality. 
+So in order to not harm the web app ecosystem, we choose to not alter but to append the Securely functionality. 
 We do that by adding `S` to the end of the desired native API.
 
 So if for example you wish to call fetch normally and go through any potential hook, you do so the way you're used to:
@@ -121,13 +121,13 @@ So if for example you wish to call fetch normally and go through any potential h
 fetch('https://example.com/this_is_just_a_normal_request');
 ```
 
-But if you want to call fetch and this time make sure to avoid any potential hooks (whether or not malicious), that's where securely comes in:
+But if you want to call fetch and this time make sure to avoid any potential hooks (whether malicious), that's where securely comes in:
 
 ```javascript
 securely(_ => fetchS('https://example.com/this_request_is_extra_sensitive'));
 ```
 
-Accessing `S` APIs is disabled outside of the `securely` callback. This is another important security mechanizm.
+Accessing `S` APIs is disabled outside of the `securely` callback. This is another important security mechanism.
 Not only that we want to have access to native APIs, but we want to make sure no other js code in runtime has such access (unless we want it to have that ability, in which case we'll pass the `securely` function on to it).
 
 Native APIs can be used by attackers who managed to execute code within the app maliciously, and we just don't want anyone to have such an ability without specifically authorizing it.
