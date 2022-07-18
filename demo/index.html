@@ -1,6 +1,7 @@
 <html>
     <head>
-        <title> Securely 🔒 </title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔒️</text></svg>">
+        <title> Securely </title>
         <script src="../securely.js"></script>
     </head>
     <body>
@@ -60,7 +61,7 @@
                 }
             });
 
-            ta.value = JSON.parse(localStorage.code || '""') ||
+            ta.value = JSON.parse(localStorage.code_securely || '""') ||
 `
     // attempt to disarm Securely's "alertS" native API (with no success!)
 
@@ -68,7 +69,7 @@
 `;
 
             bt.addEventListener('click', () => {
-                localStorage.code = JSON.stringify(ta.value);
+                localStorage.code_securely = JSON.stringify(ta.value);
                 run(ta.value);
                 securely(() => { alertS('Real alert is still accessible thanks to Securely - try again!'); });
             });
