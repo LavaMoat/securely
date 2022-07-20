@@ -20,7 +20,7 @@ fetch('https://example.com/get_all_imgs'); // goes through attacker's hook
 securely(_ => fetchS('https://example.com/get_all_imgs')); // avoids attacker's hook by using native fetch API
 ```
 
-* [Test](https://weizman.github.io/securely/demo) `Securely` for yourself with this live demo!
+* [Test](https://lavamoat.github.io/securely/demo) `Securely` for yourself with this live demo!
 * `Securely` is still experimental ⚠️ - your help is highly appreciated!
 
 ## Usage

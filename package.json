@@ -25,13 +25,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/weizman/securely.git"
+    "url": "git+https://github.com/lavamoat/securely.git"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/weizman/securely/issues"
+    "url": "https://github.com/lavamoat/securely/issues"
   },
-  "homepage": "https://weizman.github.io/securely/"
+  "homepage": "https://lavamoat.github.io/securely/"
 }
