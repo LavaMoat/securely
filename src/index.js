@@ -38,11 +38,12 @@ function securely(cb, a, b, c, d, e, f, g, h, i, j) {
     return ret;
 }
 
-function secure(win, config = { objects: {}, prototypes: {}}) {
+function secure(win, config) {
     natively(win, (nativeWin) => {
         securely(() => {
-            objects(win, nativeWin, shouldAllowNativesAccess, config.objects || {});
-            prototypes(win, nativeWin, shouldAllowNativesAccess, config.prototypes || {});
+            config = config || new nativeWin.Object();
+            objects(win, nativeWin, shouldAllowNativesAccess, config.objects || new nativeWin.Object());
+            prototypes(win, nativeWin, shouldAllowNativesAccess, config.prototypes || new nativeWin.Object());
             specifics(win, nativeWin, shouldAllowNativesAccess);
         });
     });
