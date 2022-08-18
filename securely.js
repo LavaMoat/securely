@@ -4,29 +4,29 @@
 /***/ 352:
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var objects = __webpack_require__(995);
+const objects = __webpack_require__(995);
 
-var prototypes = __webpack_require__(594);
+const prototypes = __webpack_require__(594);
 
-var specifics = __webpack_require__(184);
+const specifics = __webpack_require__(184);
 
-var allowNativesAccess = false;
+let allowNativesAccess = false;
 
 function shouldAllowNativesAccess() {
   return allowNativesAccess;
 }
 
 function natively(win, cb) {
-  var ifr = win.document.createElement('iframe');
+  const ifr = win.document.createElement('iframe');
   win.document.head.appendChild(ifr);
   cb(ifr.contentWindow);
   ifr.parentElement.removeChild(ifr);
 }
 
 function securely(cb, a, b, c, d, e, f, g, h, i, j) {
-  var state = allowNativesAccess;
+  const state = allowNativesAccess;
   allowNativesAccess = true;
-  var ret, err;
+  let ret, err;
 
   try {
     ret = cb(a, b, c, d, e, f, g, h, i, j);
@@ -45,15 +45,12 @@ function securely(cb, a, b, c, d, e, f, g, h, i, j) {
   return ret;
 }
 
-function secure(win) {
-  var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
-    objects: {},
-    prototypes: {}
-  };
-  natively(win, function (nativeWin) {
-    securely(function () {
-      objects(win, nativeWin, shouldAllowNativesAccess, config.objects || {});
-      prototypes(win, nativeWin, shouldAllowNativesAccess, config.prototypes || {});
+function secure(win, config) {
+  natively(win, nativeWin => {
+    securely(() => {
+      config = config || new nativeWin.Object();
+      objects(win, nativeWin, shouldAllowNativesAccess, config.objects || new nativeWin.Object());
+      prototypes(win, nativeWin, shouldAllowNativesAccess, config.prototypes || new nativeWin.Object());
       specifics(win, nativeWin, shouldAllowNativesAccess);
     });
   });
@@ -68,12 +65,12 @@ module.exports = secure;
 /***/ ((module) => {
 
 module.exports = function objects(win, nativeWin, shouldAllowNativesAccess, objects) {
-  for (var object in objects) {
-    var apis = objects[object];
+  for (const object in objects) {
+    const apis = objects[object];
 
-    var _loop = function _loop(i) {
-      var api = apis[i];
-      var native = nativeWin[object][api];
+    for (let i = 0; i < apis.length; i++) {
+      const api = apis[i];
+      let native = nativeWin[object][api];
 
       if (typeof native === 'function') {
         native = native.bind(win[object]);
@@ -81,7 +78,7 @@ module.exports = function objects(win, nativeWin, shouldAllowNativesAccess, obje
 
       nativeWin['Object'].defineProperty(win[object], api + 'S', {
         configurable: false,
-        get: function get() {
+        get: function () {
           if (!shouldAllowNativesAccess()) {
             return;
           }
@@ -89,10 +86,6 @@ module.exports = function objects(win, nativeWin, shouldAllowNativesAccess, obje
           return native;
         }
       });
-    };
-
-    for (var i = 0; i < apis.length; i++) {
-      _loop(i);
     }
   }
 };
@@ -102,7 +95,7 @@ module.exports = function objects(win, nativeWin, shouldAllowNativesAccess, obje
 /***/ 594:
 /***/ ((module) => {
 
-function zzz(func, shouldAllowNativesAccess) {
+function method(func, shouldAllowNativesAccess) {
   return function (a, b, c, d, e) {
     if (!shouldAllowNativesAccess()) {
       return;
@@ -112,62 +105,59 @@ function zzz(func, shouldAllowNativesAccess) {
   };
 }
 
-function xxx(nativeWin, desc, shouldAllowNativesAccess) {
-  var value = desc.value;
+function descriptor(nativeWin, desc, shouldAllowNativesAccess) {
+  const value = desc.value;
 
-  var set = desc.set || function () {};
+  const set = desc.set || (() => {});
 
-  var get = desc.get || function () {
-    return value;
-  };
+  const get = desc.get || (() => value);
 
   desc.configurable = false;
   delete desc.value;
   delete desc.writable;
-  var getter = nativeWin['Function'].prototype.call.bind(get);
-  var setter = nativeWin['Function'].prototype.call.bind(set);
-  desc.get = zzz(getter, shouldAllowNativesAccess);
-  desc.set = zzz(setter, shouldAllowNativesAccess);
+  const getter = nativeWin['Function'].prototype.call.bind(get);
+  const setter = nativeWin['Function'].prototype.call.bind(set);
+  desc.get = method(getter, shouldAllowNativesAccess);
+  desc.set = method(setter, shouldAllowNativesAccess);
   return desc;
 }
 
-function yyy(win, nativeWin, done, shouldAllowNativesAccess, prototype, property) {
-  var proto = win[prototype];
-  var arr = [];
+function prototype(win, nativeWin, done, shouldAllowNativesAccess, prototype, property) {
+  let proto = win[prototype];
+  const arr = new nativeWin.Array();
 
   while (true) {
-    var _desc = nativeWin['Object'].getOwnPropertyDescriptor(proto.prototype, property);
-
+    const desc = nativeWin['Object'].getOwnPropertyDescriptor(proto.prototype, property);
     nativeWin['Array'].prototype.push.call(arr, proto.prototype);
 
-    if (_desc) {
+    if (desc) {
       break;
     }
 
     proto = nativeWin['Object'].getPrototypeOf(proto.prototype).constructor;
   }
 
-  var desc = nativeWin['Object'].getOwnPropertyDescriptor(arr[arr.length - 1], property);
+  const desc = nativeWin['Object'].getOwnPropertyDescriptor(arr[arr.length - 1], property);
 
   while (arr.length) {
-    var _proto = nativeWin['Array'].prototype.pop.call(arr);
+    const proto = nativeWin['Array'].prototype.pop.call(arr);
 
-    if (!done[_proto.constructor.name] || !nativeWin['Array'].prototype.includes.call(done[_proto.constructor.name], property)) {
-      nativeWin['Object'].defineProperty(_proto, property + 'S', xxx(nativeWin, desc, shouldAllowNativesAccess));
-      done[_proto.constructor.name] = done[_proto.constructor.name] || [];
-      nativeWin['Array'].prototype.push.call(done[_proto.constructor.name], property);
+    if (!done[proto.constructor.name] || !nativeWin['Array'].prototype.includes.call(done[proto.constructor.name], property)) {
+      nativeWin['Object'].defineProperty(proto, property + 'S', descriptor(nativeWin, desc, shouldAllowNativesAccess));
+      done[proto.constructor.name] = done[proto.constructor.name] || new nativeWin.Array();
+      nativeWin['Array'].prototype.push.call(done[proto.constructor.name], property);
     }
   }
 }
 
 module.exports = function prototypes(win, nativeWin, shouldAllowNativesAccess, prototypes) {
-  var done = new nativeWin.Object();
+  const done = new nativeWin.Object();
 
-  var _loop = function _loop(prototype) {
-    var native = nativeWin[prototype];
-    nativeWin['Object'].defineProperty(win, prototype + 'S', {
+  for (const proto in prototypes) {
+    const native = nativeWin[proto];
+    nativeWin['Object'].defineProperty(win, proto + 'S', {
       configurable: false,
-      get: function get() {
+      get: function () {
         if (!shouldAllowNativesAccess()) {
           return;
         }
@@ -175,18 +165,14 @@ module.exports = function prototypes(win, nativeWin, shouldAllowNativesAccess, p
         return native;
       }
     });
-    done[prototype] = done[prototype] || [];
-    var properties = prototypes[prototype];
+    done[proto] = done[proto] || new nativeWin.Array();
+    const properties = prototypes[proto];
 
-    for (var i = 0; i < properties.length; i++) {
-      var property = properties[i];
-      yyy(win, nativeWin, done, shouldAllowNativesAccess, prototype, property);
-      yyy(win, nativeWin, done, shouldAllowNativesAccess, prototype + 'S', property);
+    for (let i = 0; i < properties.length; i++) {
+      const property = properties[i];
+      prototype(win, nativeWin, done, shouldAllowNativesAccess, proto, property);
+      prototype(win, nativeWin, done, shouldAllowNativesAccess, proto + 'S', property);
     }
-  };
-
-  for (var prototype in prototypes) {
-    _loop(prototype);
   }
 };
 
@@ -196,10 +182,10 @@ module.exports = function prototypes(win, nativeWin, shouldAllowNativesAccess, p
 /***/ ((module) => {
 
 module.exports = function specifics(win, nativeWin, shouldAllowNativesAccess) {
-  var getDocumentCurrentScript = nativeWin['Object'].getOwnPropertyDescriptor(win.Document.prototype, 'currentScript').get.bind(win.document);
+  let getDocumentCurrentScript = nativeWin['Object'].getOwnPropertyDescriptor(win.Document.prototype, 'currentScript').get.bind(win.document);
   nativeWin['Object'].defineProperty(win.document, 'currentScript' + 'S', {
     configurable: false,
-    get: function get() {
+    get: function () {
       if (!shouldAllowNativesAccess()) {
         return;
       }
