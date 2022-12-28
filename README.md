@@ -1,3 +1,10 @@
+# ⚠️ DEPRECATION NOTICE ⚠️
+
+Securely project is now deprecated entirely and should not be used at all, as it fails to accomplish its single security purpose due to poor design.
+Please avoid using it.
+
+Learn here https://github.com/LavaMoat/snow/pull/36#issue-1458246010 more about the idea behind Securely and why it was decided to drift away from it completely.
+
 # Securely 🔒
 
 Securely allows you to call native APIs using their original behaviour even if they were tampered within the web app:
